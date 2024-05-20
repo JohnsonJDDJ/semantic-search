@@ -1,7 +1,7 @@
 In Progress
 
 ```bash
-git clone https://github.com/yourusername/video_semantic_search.git
+git clone https://github.com/JohnsonJDDJ/video_semantic_search.git
 cd video_semantic_search
 ```
 ```bash
