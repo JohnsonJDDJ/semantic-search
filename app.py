@@ -50,7 +50,7 @@ def extract_key_frames(video_path, interval=30):
 
         if prev_hist is not None:
             hist_diff = cv2.compareHist(prev_hist, hist, cv2.HISTCMP_CORREL)
-            if hist_diff < 0.5:  # Threshold
+            if hist_diff < 0.7:  # Threshold
                 key_frames.append(frame)
 
         prev_hist = hist
