@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload and Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Video Semantic Search</h1>
+        <p>Author: Zhihao Du</p>
+    </div>
+    <div class="container">
+        <div class="left-panel">
+            <div class="upload-section">
+                <h2>Upload Video</h2>
+                <form id="upload-form" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" accept="video/*" required>
+                    <input type="submit" value="Upload">
+                </form>
+                <div id="upload-message" class="message"></div>
+            </div>
+
+            <div class="video-section" style="display: none;">
+                <h2>Uploaded Video</h2>
+                <video id="uploaded-video" width="100%" controls>
+                    <source id="video-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="search-section" style="display: none;">
+                <h2>Search</h2>
+                <form id="search-form" method="POST">
+                    <label for="query">Prompt:</label>
+                    <input type="text" id="query" name="query" placeholder="Enter search query" required>
+                    <label for="k">k value:</label>
+                    <input type="number" id="k" name="k" value="1" min="1" placeholder="k" required>
+                    <input type="submit" value="Search">
+                </form>
+                <div id="search-message" class="message"></div>
+            </div>
+
+            <div class="results-section" style="display: none;">
+                <h2>Results</h2>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = async function(event) {
+            event.preventDefault();
+            document.getElementById('upload-message').innerText = 'Processing...';
+            document.querySelector('.search-section').style.display = 'none';
+            document.querySelector('.results-section').style.display = 'none';
+            document.querySelector('.video-section').style.display = 'none';
+            document.getElementById('results').innerHTML = '';
+            const formData = new FormData(this);
+            const response = await fetch('/upload_and_search', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                document.getElementById('upload-message').innerText = 'Processing completed.';
+                const result = await response.json();
+                document.querySelector('.search-section').style.display = 'block';
+                document.querySelector('.video-section').style.display = 'block';
+                document.getElementById('video-source').src = result.video_url;
+                document.getElementById('uploaded-video').load();
+            } else {
+                const result = await response.json();
+                document.getElementById('upload-message').innerText = result.error || 'Error during processing.';
+            }
+        };
+
+        document.getElementById('search-form').onsubmit = async function(event) {
+            event.preventDefault();
+            document.getElementById('search-message').innerText = 'Searching...';
+            const formData = new FormData(this);
+            const response = await fetch('/search', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                const results = await response.json();
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+                results.forEach(frame => {
+                    const img = document.createElement('img');
+                    img.src = frame;
+                    img.style = 'max-width: 100%; margin-bottom: 10px;';
+                    resultsDiv.appendChild(img);
+                });
+                document.querySelector('.results-section').style.display = 'block';
+                document.getElementById('search-message').innerText = '';
+            } else {
+                document.getElementById('search-message').innerText = 'Error during search.';
+            }
+        };
+    </script>
+</body>
+</html>
