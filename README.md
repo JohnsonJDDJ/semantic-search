@@ -2,6 +2,8 @@
 
 Time taken - 103 min
 
+<img width="1099" alt="Screenshot 2024-05-19 at 23 09 10" src="https://github.com/JohnsonJDDJ/semantic-search/assets/30473048/61c6ef29-30cc-431d-8914-9c9b2ac674e4">
+
 ## About this App
 
 This is a simple web application for performing minimal semantic search on videos. Users can upload a video, perform semantic searches using text prompts, and view the results. The app consists of two main modules:
