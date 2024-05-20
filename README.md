@@ -1,8 +1,8 @@
 In Progress
 
 ```bash
-git clone https://github.com/JohnsonJDDJ/video_semantic_search.git
-cd video_semantic_search
+git clone https://github.com/JohnsonJDDJ/semantic-search.git
+cd semantic-search
 ```
 ```bash
 python -m venv venv
