@@ -23,6 +23,8 @@ def allowed_file(filename):
 
 def clear_uploads_folder():
     for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+        if filename == '.gitkeep': # Keep .gitkeep for git
+            continue
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         if os.path.isfile(file_path):
             os.unlink(file_path)
